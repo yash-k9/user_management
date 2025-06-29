@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:user_management/l10n/app_localizations.dart';
 import 'package:user_management/l10n/l10n.dart';
+import 'package:user_management/utils/AppTheme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.all,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       locale: const Locale('en'),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      themeMode: ThemeMode.system,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: const MyHomePage(),
     );
   }
