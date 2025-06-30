@@ -222,6 +222,7 @@ private fun SignatureCanvas(
                             currPath = Path(emptyList())
                         },
                         onDrag = { change, _ ->
+                            //Update the current path with the new position
                             val newPoints = currPath.points + change.position
                             val newPath = Path(newPoints)
                             viewModel.updateLastSignaturePath(newPath)
@@ -230,6 +231,7 @@ private fun SignatureCanvas(
                     )
                 }
         ) {
+            //Update size of the canvas for scaling
             viewModel.setSignatureCanvasSize(size)
             // Draw all stored paths
             signaturePaths.forEach { path ->
