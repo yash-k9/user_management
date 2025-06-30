@@ -11,7 +11,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="user_management" >
+        android:label="User Manager" >
 
         <activity
             android:name=".AddUserActivity"
@@ -44,6 +44,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!--
              Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
