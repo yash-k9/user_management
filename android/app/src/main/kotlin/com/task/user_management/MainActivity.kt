@@ -37,9 +37,7 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
             when (call.method) {
                 ADD_USER_ACTIVITY -> {
                     try {
-                        val intent = Intent(this, AddUserActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        }
+                        val intent = Intent(this, AddUserActivity::class.java)
                         startActivity(intent)
                     } catch (e: Exception) {
                         result.error("ACTIVITY_ERROR", e.localizedMessage, null)
