@@ -50,8 +50,9 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
 
                 DELETE_USER -> {
                     val userId = call.argument<Number>("id")?.toLong()
+                    val filePath = call.argument<String>("profileImagePath").takeIf { it != null }
                     if (userId != null) {
-                        deleteUser(userId, result)
+                        deleteUser(userId, filePath, result)
                     } else {
                         result.error("INVALID_ARGUMENT", "User ID is required", null)
                     }
@@ -87,10 +88,10 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
         }
     }
 
-    private fun deleteUser(userId: Long, result: MethodChannel.Result) {
+    private fun deleteUser(userId: Long, filePath: String?, result: MethodChannel.Result) {
         lifecycleScope.launch {
             try {
-                viewModel.deleteUserById(userId)
+                viewModel.deleteUserById(userId, filePath)
                 result.success(true)
             } catch (e: Exception) {
                 result.error("DELETE_ERROR", "Failed to delete user", e.message)

@@ -25,7 +25,7 @@ class MainViewModel() : ViewModel() {
         }
     }
 
-    suspend fun deleteUserById(userId: Long) {
-        userRepository.deleteUserById(userId)
+    suspend fun deleteUserById(userId: Long, filePath: String?) {
+        userRepository.deleteUserById(userId, filePath)
     }
 }

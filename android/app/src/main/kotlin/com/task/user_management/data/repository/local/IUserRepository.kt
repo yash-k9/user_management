@@ -9,5 +9,5 @@ interface IUserRepository {
 
     suspend fun insertUser(user: User): Long
 
-    suspend fun deleteUserById(userId: Long)
+    suspend fun deleteUserById(userId: Long, filePath: String?)
 }
