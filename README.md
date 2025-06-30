@@ -11,4 +11,4 @@ The communication between Flutter and native Android code is done using Method C
 ## Demo
 Check out the demo video of the application:
 
-https://github.com/yash-k9/user_management/blob/main/media/screen_recording.mp4
+https://github.com/user-attachments/assets/d4f7038a-1a47-43fa-b9b1-e45afd5bf0ae
