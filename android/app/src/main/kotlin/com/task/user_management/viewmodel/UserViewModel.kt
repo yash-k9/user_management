@@ -33,7 +33,7 @@ import android.graphics.Path as AndroidPath
 data class Path(val points: List<Offset>)
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: IUserRepository
+    private val repository: IUserRepository = UserRepositoryImpl()
 
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name
@@ -54,11 +54,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private var _size: Size? = null
-
-    init {
-        val userDao = AppDatabase.getDatabase(application).userDao()
-        repository = UserRepositoryImpl(userDao)
-    }
 
     fun updateName(newName: String) {
         _name.value = newName
