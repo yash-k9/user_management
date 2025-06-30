@@ -9,7 +9,7 @@ class HomeViewModel extends ChangeNotifier {
   List<User> get users => _users;
   StreamSubscription? _userStreamSubscription;
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
@@ -19,6 +19,7 @@ class HomeViewModel extends ChangeNotifier {
     _userStreamSubscription = _userRepository.getUserStream().listen((users) {
       _users = users;
       _isLoading = false;
+      _errorMessage = null;
       notifyListeners();
     });
   }
