@@ -8,11 +8,14 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
     private lateinit var viewModel: MainViewModel
     private var eventSink: EventChannel.EventSink? = null
+    private var userList: List<Map<String, Any?>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +24,12 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
     }
 
     private fun observeUserChanges() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             viewModel.getAllUsers().collect { userList ->
-                eventSink?.success(userList)
+                withContext(Dispatchers.Main) {
+                    if(eventSink == null) this@MainActivity.userList = userList
+                    eventSink?.success(userList)
+                }
             }
         }
     }
@@ -70,10 +76,10 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
 
 
     private fun getUsersForFlutter(result: MethodChannel.Result) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 viewModel.getAllUsers().collect { userList ->
-                    runOnUiThread {
+                    withContext(Dispatchers.Main) {
                         try {
                             result.success(userList)
                         } catch (_: IllegalStateException) { }
@@ -81,7 +87,7 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
                     return@collect
                 }
             } catch (e: Exception) {
-                runOnUiThread {
+                withContext(Dispatchers.Main) {
                     result.error("DATABASE_ERROR", "Failed to get users", e.message)
                 }
             }
@@ -89,12 +95,16 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
     }
 
     private fun deleteUser(userId: Long, filePath: String?, result: MethodChannel.Result) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 viewModel.deleteUserById(userId, filePath)
-                result.success(true)
+                withContext(Dispatchers.Main) {
+                    result.success(true)
+                }
             } catch (e: Exception) {
-                result.error("DELETE_ERROR", "Failed to delete user", e.message)
+                withContext(Dispatchers.Main) {
+                    result.error("DELETE_ERROR", "Failed to delete user", e.message)
+                }
             }
         }
     }
@@ -104,6 +114,10 @@ class MainActivity : FlutterActivity(), EventChannel.StreamHandler {
         events: EventChannel.EventSink?
     ) {
         eventSink = events
+        if(userList != null) {
+            eventSink?.success(userList)
+            userList = null
+        }
     }
 
     override fun onCancel(arguments: Any?) {
