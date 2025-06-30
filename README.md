@@ -7,6 +7,7 @@ User management system built with Flutter for Native Android.
 3. User Deletion - Native user deletion functionality
 
 The communication between Flutter and native Android code is done using Method Channels and Event Channels.
+Further improvements can be made by incorporating DI, improving gradle structure, linting and adding test cases.
 
 ## Demo
 Check out the demo video of the application:
