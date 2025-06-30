@@ -5,7 +5,6 @@ import '../../l10n/app_localizations.dart';
 import '../viewmodel/HomeViewModel.dart';
 import 'UserListTile.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -17,7 +16,6 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
           AppLocalizations.of(context)!.appTitle,
           style: const TextStyle(fontWeight: FontWeight.w400),
@@ -29,16 +27,22 @@ class HomeScreen extends StatelessWidget {
           : users.isEmpty
           ? Center(child: Text(AppLocalizations.of(context)!.noUsers))
           : ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                final user = users[index];
-                return UserListTile(user: user);
-              },
-            ),
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final user = users[index];
+          return UserListTile(user: user);
+        },
+      ),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Provider.of<HomeViewModel>(context, listen: false).addUser();
+          if(Theme.of(context).platform == TargetPlatform.android) {
+            Provider.of<HomeViewModel>(context, listen: false).addUser();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context)!.unSupportedMessage))
+            );
+          }
         },
         tooltip: 'Add User',
         child: const Icon(Icons.add),
