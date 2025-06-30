@@ -1,5 +1,6 @@
 {
   "appTitle": "User Manager",
   "noUsers": "No users available",
-  "deletePopupTitle": "Delete User"
+  "deletePopupTitle": "Delete User",
+  "unSupportedMessage": "This action is not supported on this platform"
 }

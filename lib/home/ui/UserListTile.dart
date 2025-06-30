@@ -10,17 +10,27 @@ import '../viewmodel/HomeViewModel.dart';
 
 class UserListTile extends StatelessWidget {
   final User user;
-  const UserListTile({Key? key, required this.user}) : super(key: key);
+  const UserListTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     var profileImagePath = user.profileImagePath ?? '';
     final file = File(profileImagePath);
-    return GestureDetector(
+
+    return InkWell(
       onLongPress: () async {
+        final RenderBox renderBox = context.findRenderObject() as RenderBox;
+        final position = renderBox.localToGlobal(Offset.zero);
+        final size = renderBox.size;
+
         final selected = await showMenu<String>(
           context: context,
-          position: const RelativeRect.fromLTRB(200, 200, 0, 0),
+          position: RelativeRect.fromLTRB(
+            position.dx + size.width - 40,
+            position.dy + size.height,
+            0,
+            0,
+          ),
           items: [
             PopupMenuItem<String>(
               value: 'delete',
@@ -29,10 +39,12 @@ class UserListTile extends StatelessWidget {
           ],
         );
         if (selected == 'delete') {
-          await Provider.of<HomeViewModel>(context, listen: false).deleteUser(user);
+          await Provider.of<HomeViewModel>(
+            context,
+            listen: false,
+          ).deleteUser(user);
         }
       },
-
       child: ListTile(
         leading: ProfilePicture(
           profileImagePath: profileImagePath,
@@ -47,11 +59,11 @@ class UserListTile extends StatelessWidget {
   }
 }
 
-
 class ProfilePicture extends StatelessWidget {
   final String profileImagePath;
   final File file;
   final TargetPlatform platform;
+
   const ProfilePicture({
     required this.profileImagePath,
     required this.file,
@@ -61,27 +73,30 @@ class ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (platform == TargetPlatform.android && profileImagePath.isNotEmpty && file.existsSync()) {
-      return Image.file(
-        file,
-        width: 40,
-        height: 40,
-        fit: BoxFit.cover,
+    if (platform == TargetPlatform.android &&
+        profileImagePath.isNotEmpty &&
+        file.existsSync()) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.file(file, width: 40, height: 40, fit: BoxFit.cover),
       );
     } else {
-      return Container(
-        width: 40,
-        height: 40,
-        color: Colors.grey,
-        child: const Icon(Icons.person, color: Colors.white),
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          width: 40,
+          height: 40,
+          color: Colors.grey,
+          child: const Icon(Icons.person, color: Colors.white),
+        ),
       );
     }
   }
 }
 
-
 class UserSignature extends StatelessWidget {
   final String? signatureBase64;
+
   const UserSignature({this.signatureBase64, super.key});
 
   @override

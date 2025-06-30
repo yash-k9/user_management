@@ -9,6 +9,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.blue,
       brightness: Brightness.light,
+      onPrimary: Colors.black
     ),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
@@ -21,8 +22,8 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.blue[200],
       elevation: 0,
       foregroundColor: Colors.black,
     ),
@@ -34,6 +35,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.blue,
       brightness: Brightness.dark,
+      onPrimary: Colors.white,
     ),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
@@ -45,8 +47,8 @@ class AppTheme {
         foregroundColor: Colors.black,
       ),
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.blue[800],
       elevation: 0,
       foregroundColor: Colors.white,
     ),
