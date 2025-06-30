@@ -12,6 +12,9 @@ class HomeViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
   HomeViewModel(this._userRepository) {
     _userStreamSubscription = _userRepository.getUserStream().listen((users) {
       _users = users;
@@ -22,11 +25,12 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> fetchUsers() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
     try {
       _users = await _userRepository.fetchUsers();
     } catch (e) {
-      //TODO: Handle error
+      _errorMessage = "Failed to fetch users: ${e.toString()}";
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -37,7 +41,8 @@ class HomeViewModel extends ChangeNotifier {
     try {
       await _userRepository.deleteUser(user);
     } catch (e) {
-      //TODO: Handle error
+      _errorMessage = "Failed to delete user: ${e.toString()}";
+      notifyListeners();
     }
   }
 
@@ -45,7 +50,15 @@ class HomeViewModel extends ChangeNotifier {
     try {
       await _userRepository.addUser();
     } catch (e) {
-      //TODO: Handle error
+      _errorMessage = "Failed to add user: ${e.toString()}";
+      notifyListeners();
+    }
+  }
+
+  void clearError() {
+    if (_errorMessage != null) {
+      _errorMessage = null;
+      notifyListeners();
     }
   }
 

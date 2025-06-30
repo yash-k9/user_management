@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:user_management/utils/AppTheme.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../viewmodel/HomeViewModel.dart';
@@ -15,6 +13,22 @@ class HomeScreen extends StatelessWidget {
     final userViewModel = Provider.of<HomeViewModel>(context);
     final users = userViewModel.users;
     final isLoading = userViewModel.isLoading;
+
+    if (userViewModel.errorMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(userViewModel.errorMessage!),
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              onPressed: userViewModel.clearError,
+            ),
+          ),
+        );
+        userViewModel.clearError();
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
