@@ -11,6 +11,9 @@ class MainViewModel() : ViewModel() {
 
     fun getAllUsers(): Flow<List<Map<String, Any?>>> {
         return userRepository.getAllUsers().map { users ->
+            if(users.isEmpty()) {
+                return@map emptyList<Map<String, Any?>>()
+            }
             users.map { user ->
                 mapOf(
                     "id" to user.id,

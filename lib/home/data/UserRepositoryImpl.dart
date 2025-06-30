@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import '../model/User.dart';
 import 'IUserRepository.dart';
 
@@ -17,6 +18,10 @@ class UserRepositoryImpl implements IUserRepository {
   Stream<List<User>> getUserStream() {
     return _userEventChannel.receiveBroadcastStream().map((data) {
       if (data is List) {
+        if (data.isEmpty) {
+          return <User>[];
+        }
+
         return data
             .map((e) => User.fromMap(Map<String, dynamic>.from(e)))
             .toList();
